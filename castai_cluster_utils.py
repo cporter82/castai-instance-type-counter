@@ -71,8 +71,8 @@ def display_most_used_instance_types(date_clstr_dict: dict) -> None:
                                count == max_count]
 
             print(f'Cluster ID: {clstr_id}')
-            print(f'Most used instance type(s): {most_used_types}')
             print(f'All instances: {instance_type_counts}')
+            print(f'Most used instance type(s): {most_used_types}')
             print(f'Usage count: {max_count}')
 
         print('\n')
