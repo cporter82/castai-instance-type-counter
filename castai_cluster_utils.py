@@ -1,3 +1,4 @@
+import csv
 import json
 import requests
 from requests import RequestException
@@ -51,7 +52,9 @@ def build_cluster_dictionary(clstr_ids: list[str], castai_api_key) -> dict:
     return date_cluster_instances
 
 
-def display_most_used_instance_types(date_clstr_dict: dict) -> None:
+def display_most_used_instance_types(date_clstr_dict: dict) -> list:
+    results = []
+
     for date, clstr_instances in date_clstr_dict.items():
         print(f'Date: {date}')
         print(f'Most used instance types per cluster:')
@@ -75,5 +78,34 @@ def display_most_used_instance_types(date_clstr_dict: dict) -> None:
             print(f'Most used instance type(s): {most_used_types}')
             print(f'Usage count: {max_count}')
 
+            results.append({
+                'date': date,
+                'cluster_id': clstr_id,
+                'instances': ','.join(instances),
+                'most_used_types': ','.join(most_used_types),
+                'usage_count': max_count
+            })
+
         print('\n')
 
+    return results
+
+
+def write_results_to_csv(results, csv_filename):
+    fieldnames = ['date', 'cluster_id', 'instances', 'most_used_types', 'usage_count']
+
+    file_exists = False
+    try:
+        with open(csv_filename, 'r') as csvfile:
+            file_exists = True
+    except FileNotFoundError:
+        pass
+
+    with open(csv_filename, 'a') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        if not file_exists:
+            writer.writeheader()
+
+        for result in results:
+            writer.writerow(result)

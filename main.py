@@ -9,7 +9,8 @@ def main():
     clusters = get_clusters(api_key)
     cluster_ids = extract_cluster_ids(clusters)
     date_cluster_instances = build_cluster_dictionary(cluster_ids, api_key)
-    display_most_used_instance_types(date_cluster_instances)
+    results = display_most_used_instance_types(date_cluster_instances)
+    write_results_to_csv(results, 'results.csv')
 
 
 if __name__ == '__main__':
